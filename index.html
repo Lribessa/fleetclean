@@ -2,236 +2,165 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FleetClean — Gestión de Limpiezas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>FleetClean</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0c10;
-    --surface: #13161e;
-    --surface2: #1c2030;
-    --border: #252a3a;
-    --accent: #3dffc0;
-    --accent2: #ff6b35;
-    --accent3: #7b5ea7;
-    --text: #e8eaf0;
-    --muted: #6b7280;
-    --danger: #ff4757;
-    --warn: #f59e0b;
-    --card-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    --bg:#0a0c10; --surface:#13161e; --surface2:#1c2030; --border:#252a3a;
+    --accent:#3dffc0; --accent2:#ff6b35; --text:#e8eaf0; --muted:#6b7280;
+    --danger:#ff4757; --warn:#f59e0b; --card-shadow:0 8px 32px rgba(0,0,0,.4);
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Mono', monospace; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 
   /* OFFLINE BAR */
-  #offlineBar {
-    display: none; background: rgba(245,158,11,0.12); border-bottom: 1px solid rgba(245,158,11,0.3);
-    color: var(--warn); text-align: center; padding: 8px 16px; font-size: 0.72rem;
-    align-items: center; justify-content: center; gap: 10px;
-  }
-  #offlineBar.show { display: flex; }
-  #offlineBar .sync-badge {
-    background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.4);
-    border-radius: 100px; padding: 2px 10px; font-size: 0.68rem;
-  }
+  #offlineBar{display:none;background:rgba(245,158,11,.12);border-bottom:1px solid rgba(245,158,11,.3);color:var(--warn);padding:8px 16px;font-size:.72rem;align-items:center;justify-content:center;gap:10px}
+  #offlineBar.show{display:flex}
+  .offline-pill{background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.4);border-radius:100px;padding:2px 10px;font-size:.68rem}
 
   /* NAV */
-  nav {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 24px; background: var(--surface); border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 100;
-  }
-  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; }
-  .logo span { color: var(--accent); }
-  .nav-tabs { display: flex; gap: 4px; background: var(--bg); border-radius: 10px; padding: 4px; }
-  .nav-tab {
-    padding: 8px 14px; border-radius: 7px; border: none; background: transparent;
-    color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.72rem; cursor: pointer; transition: all 0.2s; position: relative;
-  }
-  .nav-tab.active { background: var(--surface2); color: var(--accent); border: 1px solid var(--border); }
-  .nav-badge {
-    position: absolute; top: 4px; right: 4px; background: var(--warn); color: #000;
-    border-radius: 100px; font-size: 0.55rem; padding: 1px 5px; font-weight: 700; display: none;
-  }
-  .nav-badge.show { display: block; }
+  nav{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+  .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem}
+  .logo span{color:var(--accent)}
+  .nav-tabs{display:flex;gap:3px;background:var(--bg);border-radius:10px;padding:3px}
+  .nav-tab{padding:7px 13px;border-radius:7px;border:none;background:transparent;color:var(--muted);font-family:'DM Mono',monospace;font-size:.7rem;cursor:pointer;transition:all .2s;position:relative}
+  .nav-tab.active{background:var(--surface2);color:var(--accent);border:1px solid var(--border)}
+  .nav-badge{position:absolute;top:3px;right:3px;background:var(--warn);color:#000;border-radius:100px;font-size:.52rem;padding:1px 4px;font-weight:700;display:none}
+  .nav-badge.show{display:block}
 
   /* PAGES */
-  .page { display: none; padding: 24px 20px; max-width: 860px; margin: 0 auto; }
-  .page.active { display: block; animation: fadeIn 0.3s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .page{display:none;padding:20px 16px;max-width:860px;margin:0 auto}
+  .page.active{display:block;animation:fadeIn .25s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-  .section-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.5rem; margin-bottom: 4px; }
-  .section-sub { color: var(--muted); font-size: 0.73rem; margin-bottom: 24px; }
+  .section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.4rem;margin-bottom:3px}
+  .section-sub{color:var(--muted);font-size:.72rem;margin-bottom:20px}
 
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 16px; box-shadow: var(--card-shadow); }
-  .card-label { font-size: 0.63rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:var(--card-shadow)}
+  .card-label{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
 
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-  .form-group { display: flex; flex-direction: column; gap: 7px; }
-  label { font-size: 0.67rem; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  .form-group{display:flex;flex-direction:column;gap:6px}
+  label{font-size:.66rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
 
-  select, input[type="date"], input[type="time"], input[type="text"] {
-    background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
-    padding: 11px 13px; color: var(--text); font-family: 'DM Mono', monospace;
-    font-size: 0.85rem; outline: none; transition: border-color 0.2s; width: 100%;
-    -webkit-appearance: none; appearance: none;
+  select,input[type=date],input[type=time],input[type=text]{
+    background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+    padding:11px 12px;color:var(--text);font-family:'DM Mono',monospace;
+    font-size:.85rem;outline:none;transition:border-color .2s;width:100%;
+    -webkit-appearance:none;appearance:none
   }
-  select:focus, input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(61,255,192,0.08); }
-  select option { background: var(--surface2); }
+  select:focus,input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(61,255,192,.08)}
+  select option{background:var(--surface2)}
 
-  /* PLATE */
-  .plate-zone {
-    border: 2px dashed var(--border); border-radius: 12px; padding: 20px;
-    text-align: center; position: relative; overflow: hidden; background: var(--bg);
+  /* PLATE ZONE */
+  .plate-zone{border:2px dashed var(--border);border-radius:12px;padding:18px;text-align:center;position:relative;overflow:hidden;background:var(--bg)}
+
+  .plate-display{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;letter-spacing:8px;color:var(--accent);background:var(--surface2);border:2px solid var(--border);border-radius:10px;padding:10px 18px;display:inline-block;margin:8px 0;min-width:230px;transition:all .3s}
+  .plate-display.detected{border-color:var(--accent);box-shadow:0 0 18px rgba(61,255,192,.18)}
+
+  /* Manual input — hidden by default, shown only when needed */
+  .plate-manual-row{display:none;align-items:center;gap:8px;margin-top:10px;justify-content:center}
+  .plate-manual-row.show{display:flex}
+  #plateInput{
+    font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;
+    letter-spacing:6px;text-align:center;text-transform:uppercase;
+    background:var(--surface2);border:2px solid var(--accent);border-radius:10px;
+    padding:8px 14px;color:var(--accent);width:200px
   }
-  .plate-display {
-    font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800;
-    letter-spacing: 8px; color: var(--accent); background: var(--surface2);
-    border: 2px solid var(--border); border-radius: 10px; padding: 12px 20px;
-    display: inline-block; margin: 10px 0; min-width: 240px; transition: all 0.3s;
-  }
-  .plate-display.detected { border-color: var(--accent); box-shadow: 0 0 20px rgba(61,255,192,0.18); }
-  #plateInput {
-    font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700;
-    letter-spacing: 6px; text-align: center; text-transform: uppercase;
-    background: var(--surface2); border: 2px solid var(--accent); border-radius: 10px;
-    padding: 10px 20px; color: var(--accent); width: 100%; max-width: 280px; display: none;
-  }
-  .plate-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+
+  .plate-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
 
   /* SCAN OVERLAY */
-  .scan-overlay {
-    position: absolute; inset: 0; background: rgba(10,12,16,0.93);
-    display: none; flex-direction: column; align-items: center;
-    justify-content: center; gap: 14px; z-index: 10; border-radius: 10px;
-  }
-  .scan-overlay.active { display: flex; }
-  .scan-spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .scan-progress-bar { width: 180px; height: 4px; background: var(--border); border-radius: 100px; overflow: hidden; }
-  .scan-progress-fill { height: 100%; background: var(--accent); border-radius: 100px; width: 0%; transition: width 0.4s; }
-  .scan-status-text { font-size: 0.72rem; color: var(--accent); }
+  .scan-overlay{position:absolute;inset:0;background:rgba(10,12,16,.93);display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:10;border-radius:10px}
+  .scan-overlay.active{display:flex}
+  .scan-spinner{width:38px;height:38px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .scan-label{font-size:.75rem;color:var(--accent)}
+  .scan-progress{width:160px;height:3px;background:var(--border);border-radius:100px;overflow:hidden;margin-top:2px}
+  .scan-fill{height:100%;background:var(--accent);border-radius:100px;width:0%;transition:width .4s}
 
-  /* CAMERA */
-  #cameraModal {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.93);
-    z-index: 1000; align-items: center; justify-content: center;
-    flex-direction: column; gap: 16px; padding: 20px;
-  }
-  #cameraModal.open { display: flex; }
-  .camera-frame { position: relative; width: min(480px, 92vw); }
-  #videoEl { width: 100%; border-radius: 12px; border: 2px solid var(--accent); display: block; }
-  .plate-guide {
-    position: absolute; left: 8%; right: 8%; top: 30%; bottom: 30%;
-    border: 2px solid var(--accent); border-radius: 6px;
-    box-shadow: 0 0 0 2000px rgba(0,0,0,0.5); pointer-events: none;
-  }
-  .plate-guide::after {
-    content: 'Centra la matrícula aquí'; position: absolute; bottom: -26px;
-    left: 50%; transform: translateX(-50%); font-size: 0.67rem; color: var(--accent);
-    white-space: nowrap; font-family: 'DM Mono', monospace;
-  }
-  #captureCanvas { display: none; }
-  .camera-hint { font-size: 0.7rem; color: var(--muted); text-align: center; max-width: 300px; line-height: 1.6; }
-  .camera-btns { display: flex; gap: 12px; }
+  /* CAMERA MODAL */
+  #cameraModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:1000;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:20px}
+  #cameraModal.open{display:flex}
+  .camera-frame{position:relative;width:min(480px,92vw)}
+  #videoEl{width:100%;border-radius:12px;border:2px solid var(--accent);display:block}
+  .plate-guide{position:absolute;left:8%;right:8%;top:32%;bottom:32%;border:2px solid var(--accent);border-radius:6px;box-shadow:0 0 0 2000px rgba(0,0,0,.5);pointer-events:none}
+  .plate-guide::after{content:'Centra la matrícula aquí';position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:.66rem;color:var(--accent);white-space:nowrap;font-family:'DM Mono',monospace}
+  #captureCanvas{display:none}
+  .camera-hint{font-size:.68rem;color:var(--muted);text-align:center;max-width:300px;line-height:1.6}
+  .camera-btns{display:flex;gap:12px}
 
   /* BADGE */
-  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 100px; font-size: 0.67rem; }
-  .badge-ok { background: rgba(61,255,192,0.1); color: var(--accent); border: 1px solid rgba(61,255,192,0.3); }
-  .badge-manual { background: rgba(255,107,53,0.15); color: var(--accent2); border: 1px solid rgba(255,107,53,0.3); }
-  .badge-pending { background: rgba(245,158,11,0.12); color: var(--warn); border: 1px solid rgba(245,158,11,0.3); }
+  .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:100px;font-size:.67rem}
+  .badge-ok{background:rgba(61,255,192,.1);color:var(--accent);border:1px solid rgba(61,255,192,.3)}
+  .badge-manual{background:rgba(255,107,53,.12);color:var(--accent2);border:1px solid rgba(255,107,53,.3)}
+  .badge-pend{background:rgba(245,158,11,.12);color:var(--warn);border:1px solid rgba(245,158,11,.3)}
 
   /* BUTTONS */
-  .btn { padding: 10px 18px; border-radius: 8px; border: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 0.78rem; cursor: pointer; transition: all 0.18s; }
-  .btn-primary { background: var(--accent); color: #0a0c10; border-color: var(--accent); font-weight: 500; }
-  .btn-primary:hover { background: #2de6ab; transform: translateY(-1px); }
-  .btn-ghost { background: transparent; color: var(--text); }
-  .btn-ghost:hover { background: var(--surface2); }
-  .btn-warn { background: rgba(245,158,11,0.15); color: var(--warn); border-color: rgba(245,158,11,0.4); }
-  .btn-warn:hover { background: rgba(245,158,11,0.25); }
-  .btn-full { width: 100%; padding: 14px; font-size: 0.88rem; margin-top: 4px; }
+  .btn{padding:10px 18px;border-radius:8px;border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:.77rem;cursor:pointer;transition:all .18s}
+  .btn-primary{background:var(--accent);color:#0a0c10;border-color:var(--accent);font-weight:600}
+  .btn-primary:hover{background:#2de6ab}
+  .btn-ghost{background:transparent;color:var(--text)}
+  .btn-ghost:hover{background:var(--surface2)}
+  .btn-full{width:100%;padding:14px;font-size:.88rem;margin-top:4px}
 
   /* PROFILE */
-  .profile-header {
-    display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
-    background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px;
-  }
-  .avatar {
-    width: 64px; height: 64px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent3), var(--accent));
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: #fff; flex-shrink: 0;
-  }
-  .profile-info { flex: 1; }
-  .profile-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
-  .profile-meta { font-size: 0.72rem; color: var(--muted); }
+  .profile-header{display:flex;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px}
+  .avatar{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#7b5ea7,#3dffc0);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#fff;flex-shrink:0}
+  .profile-name-big{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:3px}
+  .profile-meta-small{font-size:.7rem;color:var(--muted)}
 
   /* QUEUE */
-  .queue-empty { text-align: center; padding: 32px; color: var(--muted); font-size: 0.8rem; }
-  .queue-item {
-    background: var(--surface2); border: 1px solid rgba(245,158,11,0.25);
-    border-radius: 10px; padding: 14px 16px;
-    display: grid; grid-template-columns: auto 1fr auto; gap: 8px 14px; align-items: center;
-    margin-bottom: 8px;
-  }
-  .queue-plate { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--warn); letter-spacing: 3px; }
-  .queue-meta { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
-  .queue-val { font-size: 0.78rem; }
-
-  .sync-bar {
-    background: rgba(61,255,192,0.06); border: 1px solid rgba(61,255,192,0.2);
-    border-radius: 10px; padding: 16px; text-align: center; margin-bottom: 16px;
-  }
-  .sync-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+  .queue-item{background:var(--surface2);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:13px 15px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 14px;align-items:center;margin-bottom:8px}
+  .queue-plate{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:var(--warn);letter-spacing:3px}
+  .queue-meta{font-size:.68rem;color:var(--muted);margin-top:2px}
+  .queue-val{font-size:.77rem}
+  .queue-empty{text-align:center;padding:28px;color:var(--muted);font-size:.78rem}
 
   /* ADMIN */
-  .list-editor { display: flex; gap: 8px; margin-bottom: 12px; }
-  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; min-height: 32px; }
-  .tag { display: inline-flex; align-items: center; gap: 8px; background: var(--surface2); border: 1px solid var(--border); padding: 6px 12px; border-radius: 100px; font-size: 0.76rem; }
-  .tag-remove { cursor: pointer; color: var(--danger); font-size: 1rem; line-height: 1; }
+  .list-editor{display:flex;gap:8px;margin-bottom:12px}
+  .tag-list{display:flex;flex-wrap:wrap;gap:8px;min-height:30px}
+  .tag{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);padding:5px 12px;border-radius:100px;font-size:.75rem}
+  .tag-remove{cursor:pointer;color:var(--danger);font-size:1rem;line-height:1}
 
   /* SUMMARY */
-  .filters-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
-  .results-count { font-size: 0.7rem; color: var(--muted); margin-bottom: 10px; letter-spacing: 1px; }
-  .records-list { display: flex; flex-direction: column; gap: 8px; }
-  .record-card {
-    background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
-    padding: 14px 16px; display: grid; grid-template-columns: auto 1fr 1fr auto;
-    gap: 8px 16px; align-items: center;
-  }
-  .record-plate { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--accent); letter-spacing: 3px; }
-  .record-meta { font-size: 0.7rem; color: var(--muted); }
-  .record-val { font-size: 0.8rem; }
-  .record-delete { cursor: pointer; color: var(--danger); font-size: 1.1rem; opacity: 0.4; transition: opacity 0.2s; }
-  .record-delete:hover { opacity: 1; }
-  .empty-state { text-align: center; padding: 48px; color: var(--muted); font-size: 0.8rem; }
+  .filters-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .results-count{font-size:.68rem;color:var(--muted);margin-bottom:8px}
+  .records-list{display:flex;flex-direction:column;gap:8px}
+  .record-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:13px 15px;display:grid;grid-template-columns:auto 1fr 1fr auto;gap:6px 14px;align-items:center}
+  .record-plate{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:var(--accent);letter-spacing:3px}
+  .record-meta{font-size:.68rem;color:var(--muted)}
+  .record-val{font-size:.78rem}
+  .record-del{cursor:pointer;color:var(--danger);font-size:1.1rem;opacity:.4;transition:opacity .2s}
+  .record-del:hover{opacity:1}
+  .plate-edit-input{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;background:var(--surface);border:1px solid var(--accent);border-radius:6px;padding:5px 10px;color:var(--accent);width:130px}
+
+  .empty-state{text-align:center;padding:40px;color:var(--muted);font-size:.78rem}
+  hr{border:none;border-top:1px solid var(--border);margin:18px 0}
 
   /* TOAST */
-  #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--surface2); border: 1px solid var(--accent); color: var(--accent); padding: 11px 22px; border-radius: 100px; font-size: 0.78rem; transition: transform 0.3s; z-index: 9999; white-space: nowrap; pointer-events: none; }
-  #toast.error { border-color: var(--danger); color: var(--danger); }
-  #toast.warn { border-color: var(--warn); color: var(--warn); }
-  #toast.show { transform: translateX(-50%) translateY(0); }
+  #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface2);border:1px solid var(--accent);color:var(--accent);padding:10px 22px;border-radius:100px;font-size:.77rem;transition:transform .3s;z-index:9999;white-space:nowrap;pointer-events:none}
+  #toast.error{border-color:var(--danger);color:var(--danger)}
+  #toast.warn{border-color:var(--warn);color:var(--warn)}
+  #toast.show{transform:translateX(-50%) translateY(0)}
 
-  /* DIVIDER */
-  .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-
-  @media (max-width: 580px) {
-    .form-row { grid-template-columns: 1fr; }
-    .filters-bar { grid-template-columns: 1fr; }
-    .record-card { grid-template-columns: auto 1fr auto; }
-    .record-card .col-service { display: none; }
-    .plate-display { font-size: 1.7rem; letter-spacing: 5px; min-width: 200px; }
-    nav { padding: 12px 14px; }
-    .nav-tab { padding: 7px 10px; font-size: 0.67rem; }
+  @media(max-width:560px){
+    .form-row{grid-template-columns:1fr}
+    .filters-bar{grid-template-columns:1fr}
+    .record-card{grid-template-columns:auto 1fr auto}
+    .record-card .col-svc{display:none}
+    nav{padding:11px 12px}
+    .nav-tab{padding:6px 9px;font-size:.66rem}
+    .plate-display{font-size:1.6rem;min-width:190px}
   }
 </style>
 </head>
 <body>
 
-<!-- OFFLINE BAR -->
 <div id="offlineBar">
-  <span>⚠ Sin conexión — los registros se guardan en cola</span>
-  <span class="sync-badge" id="queueCountBadge"></span>
+  <span>⚠ Sin conexión — registros guardados en cola</span>
+  <span class="offline-pill" id="queuePill" style="display:none"></span>
 </div>
 
 <nav>
@@ -239,15 +168,14 @@
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showPage('operator',this)">⚙ Operario</button>
     <button class="nav-tab" onclick="showPage('profile',this)">
-      👤 Perfil
-      <span class="nav-badge" id="profileBadge"></span>
+      👤 Perfil<span class="nav-badge" id="profileBadge"></span>
     </button>
     <button class="nav-tab" onclick="showPage('admin',this)">◈ Admin</button>
     <button class="nav-tab" onclick="showPage('summary',this)">▤ Resumen</button>
   </div>
 </nav>
 
-<!-- OPERATOR PAGE -->
+<!-- ═══ OPERATOR ═══ -->
 <div class="page active" id="page-operator">
   <div class="section-title">Registro de limpieza</div>
   <div class="section-sub">Rellena los datos del servicio realizado</div>
@@ -277,21 +205,32 @@
   <div class="card">
     <div class="card-label">— matrícula del vehículo</div>
     <div class="plate-zone">
-      <div style="font-size:0.73rem;color:var(--muted);margin-bottom:10px;">Escanea con la cámara o edita manualmente</div>
+
       <div class="plate-display" id="plateDisplay">_ _ _ _ _ _ _</div>
-      <input type="text" id="plateInput" maxlength="10" placeholder="ABC1234" oninput="onPlateManualInput(this.value)">
+
+      <!-- Solo aparece al pulsar "Manual" -->
+      <div class="plate-manual-row" id="plateManualRow">
+        <input type="text" id="plateInput" maxlength="10" placeholder="Ej: 1234ABC"
+          autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
+          oninput="onPlateInput(this.value)">
+        <button class="btn btn-primary" onclick="confirmManual()">✓</button>
+      </div>
+
+      <!-- Scan overlay -->
       <div class="scan-overlay" id="scanOverlay">
         <div class="scan-spinner"></div>
-        <div class="scan-progress-bar"><div class="scan-progress-fill" id="progressFill"></div></div>
-        <div class="scan-status-text" id="scanStatusText">Iniciando OCR...</div>
+        <div class="scan-progress"><div class="scan-fill" id="scanFill"></div></div>
+        <div class="scan-label" id="scanLabel">Leyendo matrícula...</div>
       </div>
+
       <div class="plate-actions">
         <button class="btn btn-primary" onclick="openCamera()">📷 Escanear</button>
-        <button class="btn btn-ghost" onclick="toggleManualEdit()">✏ Manual</button>
-        <button class="btn btn-ghost" id="btnClear" onclick="clearPlate()" style="display:none;">✕ Limpiar</button>
+        <button class="btn btn-ghost" id="btnManual" onclick="toggleManual()">✏ Manual</button>
+        <button class="btn btn-ghost" id="btnClear" onclick="clearPlate()" style="display:none">✕ Limpiar</button>
       </div>
-      <div style="margin-top:10px;min-height:24px;">
-        <span class="badge" id="plateStatus" style="display:none;"></span>
+
+      <div style="margin-top:10px;min-height:22px">
+        <span class="badge" id="plateStatus" style="display:none"></span>
       </div>
     </div>
   </div>
@@ -299,19 +238,17 @@
   <button class="btn btn-primary btn-full" onclick="saveRecord()">✓ Guardar registro</button>
 </div>
 
-<!-- PROFILE PAGE -->
+<!-- ═══ PROFILE ═══ -->
 <div class="page" id="page-profile">
   <div class="section-title">Mi perfil</div>
-  <div class="section-sub">Datos del operario y cola de sincronización</div>
-
+  <div class="section-sub">Datos del operario y cola offline</div>
   <div class="profile-header">
     <div class="avatar" id="avatarEl">?</div>
-    <div class="profile-info">
-      <div class="profile-name" id="profileNameDisplay">Sin configurar</div>
-      <div class="profile-meta" id="profileMetaDisplay">Edita tu nombre abajo</div>
+    <div>
+      <div class="profile-name-big" id="profileNameDisplay">Sin configurar</div>
+      <div class="profile-meta-small" id="profileMetaDisplay">Edita tu nombre abajo</div>
     </div>
   </div>
-
   <div class="card">
     <div class="card-label">— datos del operario</div>
     <div class="form-row">
@@ -326,21 +263,12 @@
     </div>
     <button class="btn btn-primary" onclick="saveProfile()">Guardar perfil</button>
   </div>
-
-  <hr class="divider">
-
-  <!-- OFFLINE QUEUE -->
-  <div class="card-label" style="padding: 0 0 12px 0;">— cola de envío pendiente</div>
-
-  <div id="syncStatusBar" style="display:none;" class="sync-bar">
-    <span class="sync-spinner"></span>
-    <span style="font-size:0.78rem;color:var(--accent);">Sincronizando registros pendientes...</span>
-  </div>
-
+  <hr>
+  <div class="card-label" style="padding:0 0 10px">— cola de envío pendiente</div>
   <div id="queueContainer"></div>
 </div>
 
-<!-- ADMIN PAGE -->
+<!-- ═══ ADMIN ═══ -->
 <div class="page" id="page-admin">
   <div class="section-title">Configuración</div>
   <div class="section-sub">Gestiona compañías y tipos de servicio</div>
@@ -362,10 +290,10 @@
   </div>
 </div>
 
-<!-- SUMMARY PAGE -->
+<!-- ═══ SUMMARY ═══ -->
 <div class="page" id="page-summary">
   <div class="section-title">Resumen de registros</div>
-  <div class="section-sub">Historial completo con filtros</div>
+  <div class="section-sub">Historial completo con filtros · toca la matrícula para editarla</div>
   <div class="filters-bar">
     <div class="form-group">
       <label>Compañía</label>
@@ -380,24 +308,24 @@
       <input type="date" id="filter-date" onchange="renderSummary()">
     </div>
   </div>
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
     <div class="results-count" id="resultsCount"></div>
-    <button class="btn btn-ghost" style="font-size:0.7rem;padding:6px 12px;" onclick="clearFilters()">✕ Limpiar filtros</button>
+    <button class="btn btn-ghost" style="font-size:.68rem;padding:5px 11px" onclick="clearFilters()">✕ Limpiar</button>
   </div>
   <div class="records-list" id="recordsList"></div>
 </div>
 
 <!-- CAMERA MODAL -->
 <div id="cameraModal">
-  <div style="font-family:'Syne',sans-serif;font-size:1rem;color:var(--accent);">Apunta a la matrícula</div>
+  <div style="font-family:'Syne',sans-serif;font-size:1rem;color:var(--accent)">Apunta a la matrícula</div>
   <div class="camera-frame">
     <video id="videoEl" autoplay playsinline muted></video>
     <div class="plate-guide"></div>
   </div>
   <canvas id="captureCanvas"></canvas>
-  <div class="camera-hint">Mantén el móvil estable · Buena iluminación · Matrícula centrada en el recuadro</div>
+  <div class="camera-hint">Mantén el móvil estable · Matrícula centrada en el recuadro · Buena luz</div>
   <div class="camera-btns">
-    <button class="btn btn-primary" onclick="captureAndAnalyze()">📸 Capturar</button>
+    <button class="btn btn-primary" onclick="captureAndOCR()">📸 Capturar</button>
     <button class="btn btn-ghost" onclick="closeCamera()">Cancelar</button>
   </div>
 </div>
@@ -405,469 +333,469 @@
 <div id="toast"></div>
 
 <script>
-// ================================================================
+// ═══════════════════════════════════════════
 // STATE
-// ================================================================
+// ═══════════════════════════════════════════
 let state = JSON.parse(localStorage.getItem('fleetclean') || JSON.stringify({
-  companies: ['Hertz','Europcar','Sixt','Enterprise','Avis'],
-  services: ['Limpieza exterior','Limpieza interior','Limpieza completa','Desinfección','Pulido'],
-  records: [],
-  queue: [],      // registros pendientes de sincronizar
-  profile: { name: '', surname: '' }
+  companies:['Hertz','Europcar','Sixt','Enterprise','Avis'],
+  services:['Limpieza exterior','Limpieza interior','Limpieza completa','Desinfección','Pulido'],
+  records:[], queue:[],
+  profile:{name:'',surname:''}
 }));
+if(!state.queue)   state.queue=[];
+if(!state.profile) state.profile={name:'',surname:''};
+function save(){localStorage.setItem('fleetclean',JSON.stringify(state))}
 
-// Migrar estado antiguo sin queue/profile
-if (!state.queue) state.queue = [];
-if (!state.profile) state.profile = { name: '', surname: '' };
+let currentPlate='', isManualOpen=false, cameraStream=null, isSyncing=false;
+let ocrWorker=null, ocrReady=false;
 
-function save() { localStorage.setItem('fleetclean', JSON.stringify(state)); }
+// ═══════════════════════════════════════════
+// TESSERACT — load v4 (most stable on mobile)
+// ═══════════════════════════════════════════
+async function initOCR(){
+  try{
+    let attempts=0;
+    while(typeof Tesseract==='undefined' && attempts<40){ await sleep(250); attempts++; }
+    if(typeof Tesseract==='undefined') throw new Error('not loaded');
 
-let currentPlate = '';
-let isManualEdit = false;
-let cameraStream = null;
-let tesseractWorker = null;
-let workerReady = false;
-let isSyncing = false;
-
-// ================================================================
-// OFFLINE / ONLINE DETECTION
-// ================================================================
-function updateOnlineStatus() {
-  const online = navigator.onLine;
-  document.getElementById('offlineBar').classList.toggle('show', !online);
-  updateQueueBadge();
-  if (online && state.queue.length > 0) {
-    syncQueue();
+    ocrWorker = await Tesseract.createWorker('eng', 1, {
+      workerBlobURL: false,
+      logger: ()=>{}
+    });
+    await ocrWorker.setParameters({
+      tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+      tessedit_pageseg_mode: '8',
+      preserve_interword_spaces: '0'
+    });
+    ocrReady = true;
+  } catch(e){
+    ocrReady = false;
   }
 }
-window.addEventListener('online', updateOnlineStatus);
+
+(function(){
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.4/tesseract.min.js';
+  s.onload = () => initOCR();
+  document.head.appendChild(s);
+})();
+
+// ═══════════════════════════════════════════
+// OFFLINE
+// ═══════════════════════════════════════════
+function updateOnlineStatus(){
+  document.getElementById('offlineBar').classList.toggle('show', !navigator.onLine);
+  updateQueueBadge();
+  if(navigator.onLine && state.queue.length>0) syncQueue();
+}
+window.addEventListener('online',  updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
 updateOnlineStatus();
 
-function updateQueueBadge() {
-  const n = state.queue.length;
-  const badge = document.getElementById('profileBadge');
-  const countBadge = document.getElementById('queueCountBadge');
-  badge.textContent = n;
-  badge.classList.toggle('show', n > 0);
-  countBadge.textContent = n + ' pendiente' + (n !== 1 ? 's' : '');
-  countBadge.style.display = n > 0 ? 'inline' : 'none';
+function updateQueueBadge(){
+  const n=state.queue.length;
+  const b=document.getElementById('profileBadge');
+  const p=document.getElementById('queuePill');
+  b.textContent=n; b.classList.toggle('show',n>0);
+  if(p){ p.textContent=n+' pendiente'+(n!==1?'s':''); p.style.display=n>0?'inline':'none'; }
 }
 
-// ================================================================
-// SYNC QUEUE
-// Aquí simulo la sincronización — en producción real harías un
-// fetch() a tu servidor/API. Por ahora mueve de queue → records.
-// ================================================================
-async function syncQueue() {
-  if (isSyncing || state.queue.length === 0 || !navigator.onLine) return;
-  isSyncing = true;
-
-  const bar = document.getElementById('syncStatusBar');
-  if (bar) bar.style.display = 'block';
-
-  // Simular delay de red (en producción: await fetch(...))
-  await sleep(1200);
-
-  // Mover todos los pendientes a records
-  const synced = [...state.queue];
-  state.records.unshift(...synced);
-  state.queue = [];
-  save();
-
-  isSyncing = false;
-  if (bar) bar.style.display = 'none';
-  updateQueueBadge();
-  renderQueuePanel();
-
-  toast('✓ ' + synced.length + ' registro' + (synced.length !== 1 ? 's' : '') + ' sincronizado' + (synced.length !== 1 ? 's' : ''));
+async function syncQueue(){
+  if(isSyncing||!state.queue.length||!navigator.onLine) return;
+  isSyncing=true;
+  await sleep(800);
+  const n=state.queue.length;
+  state.records.unshift(...state.queue);
+  state.queue=[];
+  save(); isSyncing=false;
+  updateQueueBadge(); renderQueuePanel();
+  toast('✓ '+n+' registro'+(n!==1?'s':'')+' sincronizado'+(n!==1?'s':''));
 }
 
-// ================================================================
-// TESSERACT (carga en background)
-// ================================================================
-async function initTesseract() {
-  try {
-    // Tesseract.js 5 usa createWorker con estos parámetros
-    tesseractWorker = await Tesseract.createWorker('eng', 1, {
-      workerPath: 'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/worker.min.js',
-      corePath: 'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract-core-simd-lstm.wasm.js',
-      logger: () => {}
-    });
-    await tesseractWorker.setParameters({
-      tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
-      tessedit_pageseg_mode: '7',
-    });
-    workerReady = true;
-  } catch(e) {
-    // En el preview de Claude falla por sandbox — en producción funciona OK
-    console.info('Tesseract no disponible en este entorno. En producción (GitHub Pages) funcionará correctamente.');
-  }
-}
-// Cargar Tesseract desde CDN de forma dinámica
-const tsScript = document.createElement('script');
-tsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js';
-tsScript.onload = () => initTesseract();
-tsScript.onerror = () => console.info('Tesseract CDN no disponible');
-document.head.appendChild(tsScript);
-
-// ================================================================
-// NAVIGATION
-// ================================================================
-function showPage(id, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
+// ═══════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
   btn.classList.add('active');
-  if (id === 'admin')   renderAdmin();
-  if (id === 'summary') { fillFilterSelects(); renderSummary(); }
-  if (id === 'profile') renderProfilePage();
+  if(id==='admin')   renderAdmin();
+  if(id==='summary'){ fillFilterSelects(); renderSummary(); }
+  if(id==='profile') renderProfilePage();
 }
 
-// ================================================================
+// ═══════════════════════════════════════════
 // SELECTS
-// ================================================================
-function fillSelects() {
+// ═══════════════════════════════════════════
+function fillSelects(){
   fillSelect('op-company', state.companies, false);
-  fillSelect('op-service', state.services, false);
+  fillSelect('op-service', state.services,  false);
 }
-function fillFilterSelects() {
+function fillFilterSelects(){
   fillSelect('filter-company', state.companies, true);
-  fillSelect('filter-service', state.services, true);
+  fillSelect('filter-service', state.services,  true);
 }
-function fillSelect(id, items, all) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const cur = el.value;
+function fillSelect(id,items,all){
+  const el=document.getElementById(id); if(!el) return;
+  const cur=el.value;
   el.innerHTML = all ? '<option value="">Todas</option>' : '<option value="">Seleccionar...</option>';
-  items.forEach(i => { const o = document.createElement('option'); o.value = i; o.textContent = i; el.appendChild(o); });
-  if (cur) el.value = cur;
+  items.forEach(i=>{ const o=document.createElement('option'); o.value=i; o.textContent=i; el.appendChild(o); });
+  if(cur) el.value=cur;
 }
 
-// ================================================================
+// ═══════════════════════════════════════════
 // CAMERA
-// ================================================================
-function openCamera() {
+// ═══════════════════════════════════════════
+function openCamera(){
   document.getElementById('cameraModal').classList.add('open');
-  navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } } })
-    .then(s => { cameraStream = s; document.getElementById('videoEl').srcObject = s; })
-    .catch(() => { closeCamera(); toast('Sin acceso a la cámara. Usa edición manual.', 'error'); });
+  navigator.mediaDevices.getUserMedia({
+    video:{ facingMode:{ideal:'environment'}, width:{ideal:1280}, height:{ideal:720} }
+  })
+  .then(s=>{ cameraStream=s; document.getElementById('videoEl').srcObject=s; })
+  .catch(()=>{ closeCamera(); toast('Sin acceso a la cámara','error'); toggleManual(true); });
 }
-function closeCamera() {
+function closeCamera(){
   document.getElementById('cameraModal').classList.remove('open');
-  if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+  if(cameraStream){ cameraStream.getTracks().forEach(t=>t.stop()); cameraStream=null; }
 }
 
-async function captureAndAnalyze() {
-  const video = document.getElementById('videoEl');
-  const canvas = document.getElementById('captureCanvas');
-  canvas.width = video.videoWidth || 640;
-  canvas.height = video.videoHeight || 480;
-  canvas.getContext('2d').drawImage(video, 0, 0);
+// ═══════════════════════════════════════════
+// IMAGE PREPROCESSING
+// ═══════════════════════════════════════════
+function preprocessPlate(src){
+  const sx=src.width*.08, sy=src.height*.28, sw=src.width*.84, sh=src.height*.44;
+  const c=document.createElement('canvas');
+  c.width=Math.round(sw*3); c.height=Math.round(sh*3);
+  const ctx=c.getContext('2d');
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,c.width,c.height);
+  ctx.drawImage(src,sx,sy,sw,sh,0,0,c.width,c.height);
 
-  // Recortar zona guía y preprocesar
-  const cropX = canvas.width * 0.08, cropY = canvas.height * 0.28;
-  const cropW = canvas.width * 0.84, cropH = canvas.height * 0.44;
-  const cropped = document.createElement('canvas');
-  cropped.width = cropW * 2; cropped.height = cropH * 2;
-  const cctx = cropped.getContext('2d');
-  cctx.filter = 'contrast(2) grayscale(1) brightness(1.1)';
-  cctx.drawImage(canvas, cropX, cropY, cropW, cropH, 0, 0, cropped.width, cropped.height);
+  const img=ctx.getImageData(0,0,c.width,c.height), d=img.data;
+  // Grayscale
+  for(let i=0;i<d.length;i+=4){ const g=d[i]*.299+d[i+1]*.587+d[i+2]*.114; d[i]=d[i+1]=d[i+2]=g; }
+  // Otsu threshold
+  const hist=new Array(256).fill(0), total=c.width*c.height;
+  for(let i=0;i<d.length;i+=4) hist[Math.round(d[i])]++;
+  let sum=0; for(let i=0;i<256;i++) sum+=i*hist[i];
+  let sumB=0,wB=0,max=0,thresh=128;
+  for(let i=0;i<256;i++){
+    wB+=hist[i]; if(!wB) continue;
+    const wF=total-wB; if(!wF) break;
+    sumB+=i*hist[i];
+    const mB=sumB/wB, mF=(sum-sumB)/wF, between=wB*wF*(mB-mF)*(mB-mF);
+    if(between>max){ max=between; thresh=i; }
+  }
+  const invert=d[0]<thresh;
+  for(let i=0;i<d.length;i+=4){ const v=d[i]>thresh?(invert?0:255):(invert?255:0); d[i]=d[i+1]=d[i+2]=v; }
 
+  // Padded output
+  const pad=30, out=document.createElement('canvas');
+  out.width=c.width+pad*2; out.height=c.height+pad*2;
+  const octx=out.getContext('2d');
+  octx.fillStyle='#fff'; octx.fillRect(0,0,out.width,out.height);
+  octx.putImageData(img,pad,pad);
+  return out;
+}
+
+async function captureAndOCR(){
+  const video=document.getElementById('videoEl');
+  const canvas=document.getElementById('captureCanvas');
+  canvas.width=video.videoWidth||640; canvas.height=video.videoHeight||480;
+  canvas.getContext('2d').drawImage(video,0,0);
   closeCamera();
-  showOverlay(true, 10, 'Preparando imagen...');
 
-  if (!workerReady) {
-    showOverlay(true, 20, 'Cargando motor OCR...');
-    let t = 0;
-    while (!workerReady && t < 60) { await sleep(500); t++; }
+  // If OCR not ready yet, wait briefly (max 5s)
+  if(!ocrReady){
+    showOverlay(true,'Preparando lector...',10);
+    let t=0;
+    while(!ocrReady && t<20){ await sleep(250); t++; }
   }
 
-  if (!workerReady) {
+  if(!ocrReady){
     showOverlay(false);
-    toast('OCR no disponible aquí. En producción funcionará. Edita manualmente.', 'warn');
+    toast('Lector no disponible — introduce la matrícula','warn');
+    toggleManual(true);
     return;
   }
 
-  try {
-    showOverlay(true, 50, 'Leyendo matrícula...');
-    const result = await tesseractWorker.recognize(cropped);
-    showOverlay(true, 85, 'Procesando...');
-    const raw = result.data.text.replace(/\s+/g,'').toUpperCase().replace(/[^A-Z0-9]/g,'');
-    const m1 = raw.match(/\d{4}[B-DF-HJ-NP-TV-Z]{3}/);
-    const m2 = raw.match(/[A-Z]{1,2}\d{4}[A-Z]{2}/);
-    const m3 = raw.match(/[A-Z0-9]{5,9}/);
-    let plate = m1?.[0] || m2?.[0] || (m3?.[0]?.length >= 5 ? m3[0].substring(0,9) : '');
-    showOverlay(true, 100, '¡Listo!');
-    await sleep(350);
+  showOverlay(true,'Procesando imagen...',30);
+  const processed=preprocessPlate(canvas);
+  showOverlay(true,'Leyendo matrícula...',60);
+
+  try{
+    const result=await ocrWorker.recognize(processed);
+    showOverlay(true,'Procesando...',90);
+    const raw=(result.data.text||'').toUpperCase().replace(/\s+/g,'').replace(/[^A-Z0-9]/g,'');
+
+    // Correct common OCR misreads in plates
+    // Correct common OCR misreads (no lookbehind for Safari compatibility)
+    const fixed=raw.split('').map((c,i,a)=>{
+      const prev=a[i-1]||'', next=a[i+1]||'';
+      const adjDigit=/\d/.test(prev)||/\d/.test(next);
+      const adjLetter=/[A-Z]/.test(prev)||/[A-Z]/.test(next);
+      if(c==='O' && adjDigit) return '0';
+      if(c==='0' && adjLetter) return 'O';
+      if(c==='I' && adjDigit) return '1';
+      if(c==='S' && adjDigit) return '5';
+      return c;
+    }).join('');
+
+    // Spanish plate patterns
+    const m1=fixed.match(/\d{4}[B-DF-HJ-NP-TV-Z]{3}/);
+    const m2=fixed.match(/[A-Z]{1,2}\d{4}[A-Z]{2}/);
+    const m3=fixed.match(/[A-Z0-9]{5,9}/);
+    const plate=m1?.[0]||m2?.[0]||(m3?.[0]?.length>=5?m3[0].substring(0,9):'');
+
+    await sleep(200); showOverlay(false);
+
+    if(plate && plate.length>=5){
+      setPlate(plate, true);
+      toast('✓ Matrícula detectada: '+plate);
+    } else {
+      toast('No se pudo leer — introduce la matrícula','warn');
+      toggleManual(true);
+    }
+  }catch(e){
     showOverlay(false);
-    if (plate) { setPlate(plate, true); toast('✓ Matrícula detectada: ' + plate); }
-    else toast('No se pudo leer. Edita manualmente.', 'warn');
-  } catch(e) {
-    showOverlay(false);
-    toast('Error en el escaneo. Edita manualmente.', 'error');
+    toast('Error al leer — introduce la matrícula','warn');
+    toggleManual(true);
   }
 }
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-function showOverlay(show, pct, msg) {
-  document.getElementById('scanOverlay').classList.toggle('active', show);
-  if (pct !== undefined) document.getElementById('progressFill').style.width = pct + '%';
-  if (msg) document.getElementById('scanStatusText').textContent = msg;
+function showOverlay(show,msg,pct){
+  document.getElementById('scanOverlay').classList.toggle('active',show);
+  if(msg) document.getElementById('scanLabel').textContent=msg;
+  if(pct!==undefined) document.getElementById('scanFill').style.width=pct+'%';
 }
 
-// ================================================================
+// ═══════════════════════════════════════════
 // PLATE
-// ================================================================
-function setPlate(plate, fromCamera) {
-  currentPlate = plate;
-  const display = document.getElementById('plateDisplay');
-  const status = document.getElementById('plateStatus');
-  const btnClear = document.getElementById('btnClear');
-  display.textContent = plate || '_ _ _ _ _ _ _';
-  display.classList.toggle('detected', !!plate);
-  if (plate) {
-    status.style.display = 'inline-flex';
-    status.className = fromCamera ? 'badge badge-ok' : 'badge badge-manual';
-    status.textContent = fromCamera ? '✓ Detectada por cámara' : '✏ Introducida manualmente';
-    btnClear.style.display = 'inline-flex';
+// ═══════════════════════════════════════════
+function setPlate(plate, fromCamera){
+  currentPlate=plate;
+  const display=document.getElementById('plateDisplay');
+  const status=document.getElementById('plateStatus');
+  const btnClear=document.getElementById('btnClear');
+  display.textContent=plate||'_ _ _ _ _ _ _';
+  display.classList.toggle('detected',!!plate);
+  if(plate){
+    status.style.display='inline-flex';
+    status.className=fromCamera?'badge badge-ok':'badge badge-manual';
+    status.textContent=fromCamera?'✓ Detectada por cámara':'✏ Introducida manualmente';
+    btnClear.style.display='inline-flex';
   } else {
-    status.style.display = 'none';
-    btnClear.style.display = 'none';
+    status.style.display='none';
+    btnClear.style.display='none';
   }
 }
-function clearPlate() {
-  setPlate('', false);
-  document.getElementById('plateInput').value = '';
-  if (isManualEdit) toggleManualEdit(false);
-}
-function toggleManualEdit(forceOff) {
-  isManualEdit = forceOff === false ? false : !isManualEdit;
-  document.getElementById('plateInput').style.display = isManualEdit ? 'block' : 'none';
-  document.getElementById('plateDisplay').style.display = isManualEdit ? 'none' : 'inline-block';
-  if (isManualEdit) { document.getElementById('plateInput').value = currentPlate; document.getElementById('plateInput').focus(); }
-}
-function onPlateManualInput(val) {
-  const clean = val.toUpperCase().replace(/[^A-Z0-9]/g,'');
-  document.getElementById('plateInput').value = clean;
-  setPlate(clean, false);
+
+function clearPlate(){
+  setPlate('',false);
+  document.getElementById('plateInput').value='';
+  closeManual();
 }
 
-// ================================================================
-// SAVE RECORD
-// ================================================================
-function saveRecord() {
-  const company = document.getElementById('op-company').value;
-  const service = document.getElementById('op-service').value;
-  const date    = document.getElementById('op-date').value;
-  const time    = document.getElementById('op-time').value;
+function toggleManual(forceOpen){
+  if(isManualOpen && !forceOpen){ closeManual(); }
+  else { openManual(); }
+}
+function openManual(){
+  isManualOpen=true;
+  document.getElementById('plateManualRow').classList.add('show');
+  document.getElementById('btnManual').textContent='✕ Cerrar';
+  const inp=document.getElementById('plateInput');
+  inp.value=currentPlate;
+  setTimeout(()=>inp.focus(),100);
+}
+function closeManual(){
+  isManualOpen=false;
+  document.getElementById('plateManualRow').classList.remove('show');
+  document.getElementById('btnManual').textContent='✏ Manual';
+}
 
-  if (!company) { toast('Selecciona una compañía', 'error'); return; }
-  if (!service) { toast('Selecciona un tipo de servicio', 'error'); return; }
-  if (!date)    { toast('Selecciona la fecha', 'error'); return; }
-  if (!currentPlate) { toast('Introduce la matrícula', 'error'); return; }
+function onPlateInput(val){
+  const clean=val.toUpperCase().replace(/[^A-Z0-9]/g,'');
+  document.getElementById('plateInput').value=clean;
+  // Live preview
+  document.getElementById('plateDisplay').textContent=clean||'_ _ _ _ _ _ _';
+}
 
-  const record = {
-    id: Date.now(),
-    company, service, date, time,
-    plate: currentPlate,
-    operator: getOperatorName(),
-    ts: new Date().toISOString()
+function confirmManual(){
+  const val=document.getElementById('plateInput').value.trim();
+  if(val.length<4){ toast('Matrícula demasiado corta','error'); return; }
+  setPlate(val, false);
+  closeManual();
+}
+
+// ═══════════════════════════════════════════
+// SAVE
+// ═══════════════════════════════════════════
+function saveRecord(){
+  const company=document.getElementById('op-company').value;
+  const service=document.getElementById('op-service').value;
+  const date=document.getElementById('op-date').value;
+  const time=document.getElementById('op-time').value;
+  if(!company){ toast('Selecciona una compañía','error'); return; }
+  if(!service){ toast('Selecciona un tipo de servicio','error'); return; }
+  if(!date)   { toast('Selecciona la fecha','error'); return; }
+  if(!currentPlate){ toast('Escanea o introduce la matrícula','error'); return; }
+
+  const record={
+    id:Date.now(), company, service, date, time,
+    plate:currentPlate,
+    operator:getOperatorName(),
+    ts:new Date().toISOString()
   };
 
-  if (navigator.onLine) {
-    // Con conexión → directo a records
-    state.records.unshift(record);
-    save();
+  if(navigator.onLine){
+    state.records.unshift(record); save();
     toast('✓ Registro guardado');
   } else {
-    // Sin conexión → a la cola
-    state.queue.unshift(record);
-    save();
+    state.queue.unshift(record); save();
     updateQueueBadge();
-    toast('📥 Sin conexión — guardado en cola de envío', 'warn');
+    toast('📥 Sin conexión — guardado en cola','warn');
   }
-
-  // Reset form
-  document.getElementById('op-company').value = '';
-  document.getElementById('op-service').value = '';
-  clearPlate();
-  if (isManualEdit) toggleManualEdit(false);
-  setDateTime();
+  document.getElementById('op-company').value='';
+  document.getElementById('op-service').value='';
+  clearPlate(); setDateTime();
 }
 
-function getOperatorName() {
-  const { name, surname } = state.profile;
-  return [name, surname].filter(Boolean).join(' ') || 'Operario';
+function getOperatorName(){
+  const{name,surname}=state.profile;
+  return [name,surname].filter(Boolean).join(' ')||'Operario';
 }
 
-// ================================================================
+// ═══════════════════════════════════════════
 // PROFILE
-// ================================================================
-function renderProfilePage() {
-  const { name, surname } = state.profile;
-  document.getElementById('profileName').value = name || '';
-  document.getElementById('profileSurname').value = surname || '';
-  updateProfileHeader();
-  renderQueuePanel();
+// ═══════════════════════════════════════════
+function renderProfilePage(){
+  const{name,surname}=state.profile;
+  document.getElementById('profileName').value=name||'';
+  document.getElementById('profileSurname').value=surname||'';
+  updateProfileHeader(); renderQueuePanel();
 }
-
-function updateProfileHeader() {
-  const { name, surname } = state.profile;
-  const full = [name, surname].filter(Boolean).join(' ');
-  document.getElementById('profileNameDisplay').textContent = full || 'Sin configurar';
-  document.getElementById('profileMetaDisplay').textContent = full ? 'Operario activo' : 'Edita tu nombre abajo';
-  document.getElementById('avatarEl').textContent = name ? name[0].toUpperCase() : '?';
+function updateProfileHeader(){
+  const{name,surname}=state.profile;
+  const full=[name,surname].filter(Boolean).join(' ');
+  document.getElementById('profileNameDisplay').textContent=full||'Sin configurar';
+  document.getElementById('profileMetaDisplay').textContent=full?'Operario activo':'Edita tu nombre abajo';
+  document.getElementById('avatarEl').textContent=name?name[0].toUpperCase():'?';
 }
-
-function saveProfile() {
-  state.profile.name    = document.getElementById('profileName').value.trim();
-  state.profile.surname = document.getElementById('profileSurname').value.trim();
-  save();
-  updateProfileHeader();
-  toast('✓ Perfil guardado');
+function saveProfile(){
+  state.profile.name=document.getElementById('profileName').value.trim();
+  state.profile.surname=document.getElementById('profileSurname').value.trim();
+  save(); updateProfileHeader(); toast('✓ Perfil guardado');
 }
-
-function renderQueuePanel() {
-  const container = document.getElementById('queueContainer');
-  if (!container) return;
-
-  if (state.queue.length === 0) {
-    container.innerHTML = `
-      <div class="card">
-        <div class="queue-empty">
-          <div style="font-size:2rem;margin-bottom:8px;">✓</div>
-          <div>Todo sincronizado — sin pendientes</div>
-        </div>
-      </div>`;
+function renderQueuePanel(){
+  const c=document.getElementById('queueContainer'); if(!c) return;
+  if(!state.queue.length){
+    c.innerHTML=`<div class="card"><div class="queue-empty"><div style="font-size:1.8rem;margin-bottom:6px">✓</div>Todo sincronizado — sin pendientes</div></div>`;
     return;
   }
-
-  const items = state.queue.map((r, i) => `
+  const items=state.queue.map(r=>`
     <div class="queue-item">
-      <div>
-        <div class="queue-plate">${r.plate}</div>
-        <div class="queue-meta">${r.date}${r.time ? ' · ' + r.time : ''}</div>
-      </div>
-      <div>
-        <div class="queue-val">${r.company}</div>
-        <div class="queue-meta">${r.service}</div>
-      </div>
-      <span class="badge badge-pending">⏳ Pendiente</span>
+      <div><div class="queue-plate">${r.plate}</div><div class="queue-meta">${r.date}${r.time?' · '+r.time:''}</div></div>
+      <div><div class="queue-val">${r.company}</div><div class="queue-meta">${r.service}</div></div>
+      <span class="badge badge-pend">⏳</span>
     </div>`).join('');
-
-  const syncBtn = navigator.onLine
-    ? `<button class="btn btn-primary btn-full" onclick="syncQueue().then(renderQueuePanel)" style="margin-top:12px;">↑ Sincronizar ahora (${state.queue.length})</button>`
-    : `<div style="text-align:center;font-size:0.72rem;color:var(--muted);margin-top:12px;">Se sincronizarán automáticamente al recuperar la conexión</div>`;
-
-  container.innerHTML = `
-    <div class="card">
-      <div class="card-label">— ${state.queue.length} registro${state.queue.length !== 1 ? 's' : ''} pendiente${state.queue.length !== 1 ? 's' : ''} de envío</div>
-      <div id="syncStatusBar" style="display:none;" class="sync-bar">
-        <span class="sync-spinner"></span>
-        <span style="font-size:0.78rem;color:var(--accent);">Sincronizando...</span>
-      </div>
-      ${items}
-      ${syncBtn}
-    </div>`;
+  const btn=navigator.onLine
+    ?`<button class="btn btn-primary btn-full" style="margin-top:12px" onclick="syncQueue().then(()=>renderQueuePanel())">↑ Sincronizar ahora (${state.queue.length})</button>`
+    :`<div style="text-align:center;font-size:.72rem;color:var(--muted);margin-top:12px">Se sincronizarán al recuperar la conexión</div>`;
+  c.innerHTML=`<div class="card"><div class="card-label">— ${state.queue.length} pendiente${state.queue.length!==1?'s':''}</div>${items}${btn}</div>`;
 }
 
-// ================================================================
+// ═══════════════════════════════════════════
 // ADMIN
-// ================================================================
-function renderAdmin() {
+// ═══════════════════════════════════════════
+function renderAdmin(){
   renderTags('companies','companiesList');
   renderTags('services','servicesList');
 }
-function renderTags(key, listId) {
-  const el = document.getElementById(listId);
-  el.innerHTML = state[key].length
-    ? state[key].map((item,i) => `<div class="tag"><span>${item}</span><span class="tag-remove" onclick="removeItem('${key}',${i},'${listId}')">×</span></div>`).join('')
-    : `<span style="font-size:0.73rem;color:var(--muted)">Sin elementos</span>`;
+function renderTags(key,listId){
+  const el=document.getElementById(listId);
+  el.innerHTML=state[key].length
+    ?state[key].map((v,i)=>`<div class="tag"><span>${v}</span><span class="tag-remove" onclick="removeItem('${key}',${i},'${listId}')">×</span></div>`).join('')
+    :`<span style="font-size:.73rem;color:var(--muted)">Sin elementos</span>`;
 }
-function addItem(key, inputId, listId) {
-  const input = document.getElementById(inputId);
-  const val = input.value.trim();
-  if (!val) return;
-  if (state[key].map(v=>v.toLowerCase()).includes(val.toLowerCase())) { toast('Ya existe', 'warn'); return; }
-  state[key].push(val);
-  save(); fillSelects(); renderTags(key, listId);
-  input.value = '';
-  toast(`"${val}" añadido`);
+function addItem(key,inputId,listId){
+  const inp=document.getElementById(inputId), val=inp.value.trim();
+  if(!val) return;
+  if(state[key].map(v=>v.toLowerCase()).includes(val.toLowerCase())){ toast('Ya existe','warn'); return; }
+  state[key].push(val); save(); fillSelects(); renderTags(key,listId);
+  inp.value=''; toast(`"${val}" añadido`);
 }
-function removeItem(key, idx, listId) {
-  const name = state[key][idx];
-  state[key].splice(idx, 1);
-  save(); fillSelects(); renderTags(key, listId);
+function removeItem(key,idx,listId){
+  const name=state[key][idx];
+  state[key].splice(idx,1); save(); fillSelects(); renderTags(key,listId);
   toast(`"${name}" eliminado`);
 }
 
-// ================================================================
+// ═══════════════════════════════════════════
 // SUMMARY
-// ================================================================
-function renderSummary() {
-  const fc = document.getElementById('filter-company')?.value || '';
-  const fs = document.getElementById('filter-service')?.value || '';
-  const fd = document.getElementById('filter-date')?.value || '';
-  let records = state.records;
-  if (fc) records = records.filter(r => r.company === fc);
-  if (fs) records = records.filter(r => r.service === fs);
-  if (fd) records = records.filter(r => r.date === fd);
-  document.getElementById('resultsCount').textContent = records.length + ' registro' + (records.length !== 1 ? 's' : '');
-  const list = document.getElementById('recordsList');
-  if (!records.length) { list.innerHTML = '<div class="empty-state">No hay registros con estos filtros</div>'; return; }
-  list.innerHTML = records.map(r => `
+// ═══════════════════════════════════════════
+function renderSummary(){
+  const fc=document.getElementById('filter-company')?.value||'';
+  const fs=document.getElementById('filter-service')?.value||'';
+  const fd=document.getElementById('filter-date')?.value||'';
+  let records=state.records;
+  if(fc) records=records.filter(r=>r.company===fc);
+  if(fs) records=records.filter(r=>r.service===fs);
+  if(fd) records=records.filter(r=>r.date===fd);
+  document.getElementById('resultsCount').textContent=records.length+' registro'+(records.length!==1?'s':'');
+  const list=document.getElementById('recordsList');
+  if(!records.length){ list.innerHTML='<div class="empty-state">No hay registros con estos filtros</div>'; return; }
+  list.innerHTML=records.map(r=>`
     <div class="record-card">
       <div>
-        <div class="record-plate">${r.plate}</div>
-        <div class="record-meta">${r.date}${r.time ? ' · ' + r.time : ''}</div>
+        <input class="plate-edit-input" value="${r.plate}" maxlength="10"
+          autocapitalize="characters" autocorrect="off" spellcheck="false"
+          onchange="updatePlate(${r.id},this.value)" title="Toca para editar">
+        <div class="record-meta">${r.date}${r.time?' · '+r.time:''} · ${r.operator||''}</div>
       </div>
       <div><div class="record-val">${r.company}</div></div>
-      <div class="col-service"><div class="record-meta">${r.service}</div></div>
-      <span class="record-delete" onclick="deleteRecord(${r.id})">🗑</span>
+      <div class="col-svc"><div class="record-meta">${r.service}</div></div>
+      <span class="record-del" onclick="deleteRecord(${r.id})">🗑</span>
     </div>`).join('');
 }
-function deleteRecord(id) {
-  if (!confirm('¿Eliminar este registro?')) return;
-  state.records = state.records.filter(r => r.id !== id);
-  save(); renderSummary();
-  toast('Registro eliminado');
+function updatePlate(id,val){
+  const clean=val.toUpperCase().replace(/[^A-Z0-9]/g,'');
+  const rec=state.records.find(r=>r.id===id);
+  if(rec){ rec.plate=clean; save(); toast('✓ Matrícula actualizada'); }
 }
-function clearFilters() {
-  ['filter-company','filter-service','filter-date'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+function deleteRecord(id){
+  if(!confirm('¿Eliminar este registro?')) return;
+  state.records=state.records.filter(r=>r.id!==id);
+  save(); renderSummary(); toast('Registro eliminado');
+}
+function clearFilters(){
+  ['filter-company','filter-service','filter-date'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   renderSummary();
 }
 
-// ================================================================
-// TOAST
-// ================================================================
+// ═══════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════
 let toastTimer;
-function toast(msg, type = '') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = (type ? type + ' ' : '') + 'show';
+function toast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className=(type ? type+' ' : '')+'show';
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+}
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+function setDateTime(){
+  const now=new Date();
+  document.getElementById('op-date').value=now.toISOString().split('T')[0];
+  document.getElementById('op-time').value=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
 }
 
-// ================================================================
-// ENTER KEY IN ADMIN
-// ================================================================
-document.getElementById('newCompany').addEventListener('keydown', e => { if(e.key==='Enter') addItem('companies','newCompany','companiesList'); });
-document.getElementById('newService').addEventListener('keydown', e => { if(e.key==='Enter') addItem('services','newService','servicesList'); });
+document.getElementById('newCompany').addEventListener('keydown',e=>{ if(e.key==='Enter') addItem('companies','newCompany','companiesList'); });
+document.getElementById('newService').addEventListener('keydown',e=>{ if(e.key==='Enter') addItem('services','newService','servicesList'); });
+document.getElementById('plateInput').addEventListener('keydown',e=>{ if(e.key==='Enter') confirmManual(); });
 
-// ================================================================
 // INIT
-// ================================================================
-function setDateTime() {
-  const now = new Date();
-  document.getElementById('op-date').value = now.toISOString().split('T')[0];
-  document.getElementById('op-time').value = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-}
-setDateTime();
-fillSelects();
-updateQueueBadge();
-updateProfileHeader();
+setDateTime(); fillSelects(); updateQueueBadge(); updateProfileHeader();
 </script>
 </body>
 </html>

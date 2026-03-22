@@ -41,7 +41,7 @@
   .form-group{display:flex;flex-direction:column;gap:6px}
   label{font-size:.66rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
 
-  select,input[type=date],input[type=time],input[type=text]{
+  select,input[type=date],input[type=time],input[type=text],input[type=password]{
     background:var(--surface2);border:1px solid var(--border);border-radius:8px;
     padding:11px 12px;color:var(--text);font-family:'DM Mono',monospace;
     font-size:.85rem;outline:none;transition:border-color .2s;width:100%;
@@ -52,41 +52,22 @@
 
   /* PLATE ZONE */
   .plate-zone{border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;position:relative;overflow:hidden;background:var(--bg)}
-
-  /* Plate display — big letters, no special font to avoid render issues */
-  .plate-display{
-    font-family:monospace;font-size:2.4rem;font-weight:900;
-    letter-spacing:6px;color:var(--accent);
-    background:var(--surface2);border:2px solid var(--border);
-    border-radius:10px;padding:12px 20px;
-    display:inline-block;margin:8px 0;min-width:240px;
-    transition:all .3s;word-break:break-all
-  }
+  .plate-display{font-family:monospace;font-size:2.4rem;font-weight:900;letter-spacing:6px;color:var(--accent);background:var(--surface2);border:2px solid var(--border);border-radius:10px;padding:12px 20px;display:inline-block;margin:8px 0;min-width:240px;transition:all .3s}
   .plate-display.detected{border-color:var(--accent);box-shadow:0 0 18px rgba(61,255,192,.2)}
+  .plate-display.pending{border-color:var(--warn);color:var(--warn)}
 
-  /* Manual input row — hidden by default */
   .plate-manual-row{display:none;flex-direction:column;align-items:center;gap:10px;margin-top:14px}
   .plate-manual-row.show{display:flex}
-  #plateInput{
-    font-family:monospace;font-size:1.8rem;font-weight:900;
-    letter-spacing:6px;text-align:center;text-transform:uppercase;
-    background:var(--surface2);border:2px solid var(--accent);border-radius:10px;
-    padding:10px 14px;color:var(--accent);width:100%;max-width:280px
-  }
+  #plateInput{font-family:monospace;font-size:1.8rem;font-weight:900;letter-spacing:6px;text-align:center;text-transform:uppercase;background:var(--surface2);border:2px solid var(--accent);border-radius:10px;padding:10px 14px;color:var(--accent);width:100%;max-width:280px}
 
-  /* Scan overlay */
   .scan-overlay{position:absolute;inset:0;background:rgba(10,12,16,.93);display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:10;border-radius:10px}
   .scan-overlay.active{display:flex}
   .scan-spinner{width:38px;height:38px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
   .scan-msg{font-size:.78rem;color:var(--accent)}
 
-  /* Captured image preview */
-  #plateImgPreview{
-    display:none;width:100%;max-width:340px;border-radius:8px;
-    border:2px solid var(--border);margin:10px auto 0;object-fit:contain
-  }
-  #plateImgPreview.show{display:block}
+  .no-api-warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:12px;font-size:.73rem;color:var(--warn);line-height:1.6;margin-bottom:14px;display:none}
+  .no-api-warn.show{display:block}
 
   .plate-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
 
@@ -100,36 +81,49 @@
   .btn-primary:hover{background:#2de6ab}
   .btn-ghost{background:transparent;color:var(--text)}
   .btn-ghost:hover{background:var(--surface2)}
+  .btn-warn{background:rgba(245,158,11,.15);color:var(--warn);border-color:rgba(245,158,11,.4)}
   .btn-full{width:100%;padding:14px;font-size:.88rem;margin-top:4px;justify-content:center}
 
-  /* Hidden file input for camera */
   #cameraFileInput{display:none}
 
-  /* Profile */
+  /* profile */
   .profile-header{display:flex;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px}
   .avatar{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#7b5ea7,#3dffc0);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#fff;flex-shrink:0}
   .profile-name-big{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:3px}
   .profile-meta-small{font-size:.7rem;color:var(--muted)}
 
-  /* Queue */
-  .queue-item{background:var(--surface2);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:13px 15px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 14px;align-items:center;margin-bottom:8px}
-  .queue-plate{font-family:monospace;font-size:.95rem;font-weight:700;color:var(--warn);letter-spacing:3px}
+  .apikey-note{background:rgba(61,255,192,.06);border:1px solid rgba(61,255,192,.2);border-radius:8px;padding:12px;font-size:.72rem;color:var(--muted);line-height:1.7;margin-bottom:12px}
+  .apikey-note a{color:var(--accent);text-decoration:none}
+  .apikey-status{font-size:.72rem;margin-top:8px}
+  .apikey-status.ok{color:var(--accent)}
+  .apikey-status.missing{color:var(--warn)}
+
+  /* queue */
+  .queue-item{background:var(--surface2);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:13px 15px;margin-bottom:8px}
+  .queue-item-row{display:grid;grid-template-columns:auto 1fr auto;gap:6px 14px;align-items:center}
+  .queue-plate{font-family:monospace;font-size:.95rem;font-weight:700;letter-spacing:3px}
+  .queue-plate.known{color:var(--accent)}
+  .queue-plate.unknown{color:var(--warn)}
   .queue-meta{font-size:.68rem;color:var(--muted);margin-top:2px}
   .queue-val{font-size:.77rem}
   .queue-empty{text-align:center;padding:28px;color:var(--muted);font-size:.78rem}
 
-  /* Admin */
+  /* syncing indicator */
+  .sync-row{display:flex;align-items:center;gap:8px;font-size:.72rem;color:var(--accent);margin-top:8px}
+  .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 1s ease infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+  /* admin */
   .list-editor{display:flex;gap:8px;margin-bottom:12px}
   .tag-list{display:flex;flex-wrap:wrap;gap:8px;min-height:30px}
   .tag{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);padding:5px 12px;border-radius:100px;font-size:.75rem}
   .tag-remove{cursor:pointer;color:var(--danger);font-size:1rem;line-height:1}
 
-  /* Summary */
+  /* summary */
   .filters-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
   .results-count{font-size:.68rem;color:var(--muted);margin-bottom:8px}
   .records-list{display:flex;flex-direction:column;gap:8px}
   .record-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:13px 15px;display:grid;grid-template-columns:auto 1fr 1fr auto;gap:6px 14px;align-items:center}
-  .record-plate{font-family:monospace;font-size:.95rem;font-weight:700;color:var(--accent);letter-spacing:3px}
   .record-meta{font-size:.68rem;color:var(--muted)}
   .record-val{font-size:.78rem}
   .record-del{cursor:pointer;color:var(--danger);font-size:1.1rem;opacity:.4;transition:opacity .2s}
@@ -157,7 +151,7 @@
 <body>
 
 <div id="offlineBar">
-  <span>⚠ Sin conexión — registros guardados en cola</span>
+  <span>⚠ Sin conexión — foto guardada, matrícula se leerá al recuperar señal</span>
   <span class="offline-pill" id="queuePill" style="display:none"></span>
 </div>
 
@@ -175,6 +169,10 @@
 <div class="page active" id="page-operator">
   <div class="section-title">Registro de limpieza</div>
   <div class="section-sub">Rellena los datos del servicio realizado</div>
+
+  <div class="no-api-warn" id="noApiWarn">
+    ⚠ Sin API key configurada — ve a <strong>Perfil</strong> para activar la lectura automática de matrículas.
+  </div>
 
   <div class="card">
     <div class="card-label">— datos del servicio</div>
@@ -200,37 +198,26 @@
 
   <div class="card">
     <div class="card-label">— matrícula del vehículo</div>
-    <div class="plate-zone" id="plateZone">
-
-      <!-- Plate display -->
+    <div class="plate-zone">
       <div class="plate-display" id="plateDisplay">???????</div>
 
-      <!-- Image preview after capture -->
-      <img id="plateImgPreview" alt="Foto matrícula">
-
-      <!-- Manual input — hidden until needed -->
       <div class="plate-manual-row" id="plateManualRow">
-        <input type="text" id="plateInput" maxlength="10"
-          placeholder="Ej: 1234ABC"
-          autocomplete="off" autocorrect="off"
-          autocapitalize="characters" spellcheck="false"
+        <input type="text" id="plateInput" maxlength="10" placeholder="Ej: 1234ABC"
+          autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
           oninput="onPlateInput(this.value)">
-        <button class="btn btn-primary" onclick="confirmManual()">✓ Confirmar matrícula</button>
+        <button class="btn btn-primary" onclick="confirmManual()">✓ Confirmar</button>
       </div>
 
-      <!-- Scanning overlay -->
       <div class="scan-overlay" id="scanOverlay">
         <div class="scan-spinner"></div>
-        <div class="scan-msg" id="scanMsg">Leyendo matrícula...</div>
+        <div class="scan-msg" id="scanMsg">Analizando matrícula...</div>
       </div>
 
+      <input type="file" id="cameraFileInput" accept="image/*" capture="environment"
+        onchange="handlePhoto(this)">
+
       <div class="plate-actions">
-        <!-- Hidden file input — triggers native camera -->
-        <input type="file" id="cameraFileInput" accept="image/*" capture="environment"
-          onchange="handlePhotoCapture(this)">
-        <button class="btn btn-primary" onclick="document.getElementById('cameraFileInput').click()">
-          📷 Fotografiar matrícula
-        </button>
+        <button class="btn btn-primary" onclick="triggerCamera()">📷 Fotografiar matrícula</button>
         <button class="btn btn-ghost" id="btnManual" onclick="toggleManual()">✏ Manual</button>
         <button class="btn btn-ghost" id="btnClear" onclick="clearPlate()" style="display:none">✕ Limpiar</button>
       </div>
@@ -247,7 +234,8 @@
 <!-- PROFILE -->
 <div class="page" id="page-profile">
   <div class="section-title">Mi perfil</div>
-  <div class="section-sub">Datos del operario y cola offline</div>
+  <div class="section-sub">Datos del operario y configuración</div>
+
   <div class="profile-header">
     <div class="avatar" id="avatarEl">?</div>
     <div>
@@ -255,6 +243,7 @@
       <div class="profile-meta-small" id="profileMetaDisplay">Edita tu nombre abajo</div>
     </div>
   </div>
+
   <div class="card">
     <div class="card-label">— datos del operario</div>
     <div class="form-row">
@@ -269,8 +258,28 @@
     </div>
     <button class="btn btn-primary" onclick="saveProfile()">Guardar perfil</button>
   </div>
+
+  <div class="card">
+    <div class="card-label">— API key Gemini (lectura automática de matrículas)</div>
+    <div class="apikey-note">
+      Gratis hasta 1.500 lecturas/día. Sin tarjeta de crédito.<br>
+      1. Ve a <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a><br>
+      2. Inicia sesión con Gmail → <strong>"Create API key"</strong><br>
+      3. Copia la key (empieza por AIza...) y pégala aquí
+    </div>
+    <div class="form-group">
+      <label>API Key</label>
+      <input type="password" id="apiKeyInput" placeholder="AIza...">
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;margin-top:10px">
+      <button class="btn btn-primary" onclick="saveApiKey()">Guardar</button>
+      <button class="btn btn-ghost" onclick="clearApiKey()" style="font-size:.72rem">Eliminar key</button>
+    </div>
+    <div class="apikey-status" id="apiKeyStatus"></div>
+  </div>
+
   <hr>
-  <div class="card-label" style="padding:0 0 10px">— cola de envío pendiente</div>
+  <div class="card-label" style="padding:0 0 10px">— cola pendiente</div>
   <div id="queueContainer"></div>
 </div>
 
@@ -324,30 +333,35 @@
 <div id="toast"></div>
 
 <script>
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 // STATE
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 let state = JSON.parse(localStorage.getItem('fleetclean') || JSON.stringify({
   companies:['Hertz','Europcar','Sixt','Enterprise','Avis'],
   services:['Limpieza exterior','Limpieza interior','Limpieza completa','Desinfección','Pulido'],
   records:[], queue:[],
-  profile:{name:'',surname:''}
+  profile:{name:'',surname:''},
+  apiKey:''
 }));
-if(!state.queue)   state.queue=[];
-if(!state.profile) state.profile={name:'',surname:''};
-function save(){localStorage.setItem('fleetclean',JSON.stringify(state))}
+if(!state.queue)   state.queue   = [];
+if(!state.profile) state.profile = {name:'',surname:''};
+if(!state.apiKey)  state.apiKey  = '';
 
-let currentPlate = '';
-let isManualOpen = false;
-let isSyncing   = false;
+function save(){ localStorage.setItem('fleetclean', JSON.stringify(state)); }
 
-// ═══════════════════════════════════
-// OFFLINE
-// ═══════════════════════════════════
+let currentPlate   = '';
+let currentPhoto   = null; // base64 of current photo
+let currentMime    = 'image/jpeg';
+let isManualOpen   = false;
+let isSyncing      = false;
+
+// ═══════════════════════════════════════════
+// ONLINE / OFFLINE
+// ═══════════════════════════════════════════
 function updateOnlineStatus(){
   document.getElementById('offlineBar').classList.toggle('show', !navigator.onLine);
   updateQueueBadge();
-  if(navigator.onLine && state.queue.length > 0) syncQueue();
+  if(navigator.onLine && state.queue.length > 0) processPendingQueue();
 }
 window.addEventListener('online',  updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
@@ -355,146 +369,193 @@ updateOnlineStatus();
 
 function updateQueueBadge(){
   const n = state.queue.length;
-  const b = document.getElementById('profileBadge');
+  document.getElementById('profileBadge').textContent = n;
+  document.getElementById('profileBadge').classList.toggle('show', n > 0);
   const p = document.getElementById('queuePill');
-  b.textContent = n;
-  b.classList.toggle('show', n > 0);
   if(p){ p.textContent = n+' pendiente'+(n!==1?'s':''); p.style.display = n>0?'inline':'none'; }
 }
 
-async function syncQueue(){
-  if(isSyncing || !state.queue.length || !navigator.onLine) return;
+// ═══════════════════════════════════════════
+// PROCESS PENDING QUEUE
+// When back online: run OCR on any queued items
+// that have a photo but no plate yet
+// ═══════════════════════════════════════════
+async function processPendingQueue(){
+  if(isSyncing || !navigator.onLine || !state.apiKey) return;
+  const pending = state.queue.filter(r => r.photoData && !r.plate);
+  if(!pending.length){
+    // No photos to process — just move to records
+    flushQueue();
+    return;
+  }
+
   isSyncing = true;
-  await sleep(800);
-  const n = state.queue.length;
-  state.records.unshift(...state.queue);
-  state.queue = [];
-  save(); isSyncing = false;
-  updateQueueBadge(); renderQueuePanel();
-  toast('✓ '+n+' registro'+(n!==1?'s':'')+' sincronizado'+(n!==1?'s':''));
+  updateQueueBadge();
+  renderQueuePanel();
+
+  let processed = 0;
+  for(const item of pending){
+    try {
+      const plate = await callGemini(item.photoData, item.photoMime);
+      if(plate){
+        item.plate    = plate;
+        item.photoData = null; // free memory after reading
+        processed++;
+        save();
+        renderQueuePanel();
+      }
+    } catch(e){ /* will retry next time */ }
+    // small delay between calls
+    await sleep(400);
+  }
+
+  // Move all items that now have a plate to records
+  flushQueue();
+  isSyncing = false;
+
+  if(processed > 0){
+    toast('✓ '+processed+' matrícula'+(processed!==1?'s':'')+' leída'+(processed!==1?'s':'')+' automáticamente');
+  }
 }
 
-// ═══════════════════════════════════
-// PHOTO CAPTURE + OCR
-// Uses native camera via <input capture>
-// Then reads text using the Web OEM
-// (no external libs — pure canvas + heuristic)
-// ═══════════════════════════════════
-function handlePhotoCapture(input){
+function flushQueue(){
+  // Only move items that have a plate
+  const ready = state.queue.filter(r => r.plate);
+  const still = state.queue.filter(r => !r.plate);
+  if(ready.length){
+    state.records.unshift(...ready);
+    state.queue = still;
+    save();
+    updateQueueBadge();
+    renderQueuePanel();
+  }
+}
+
+// ═══════════════════════════════════════════
+// GEMINI OCR
+// ═══════════════════════════════════════════
+async function callGemini(base64, mime){
+  const res = await fetch(
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+state.apiKey,
+    {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        contents:[{
+          parts:[
+            { text:'Extrae la matrícula del vehículo de esta imagen. Devuelve ÚNICAMENTE la matrícula en mayúsculas sin espacios, guiones ni puntos. Solo letras y números. Si no hay matrícula visible responde: NODETECTED' },
+            { inline_data:{ mime_type: mime || 'image/jpeg', data: base64 } }
+          ]
+        }],
+        generationConfig:{ maxOutputTokens:20, temperature:0 }
+      })
+    }
+  );
+  if(!res.ok){ const e = await res.json().catch(()=>({})); throw new Error(e?.error?.message || 'Error '+res.status); }
+  const data  = await res.json();
+  const raw   = (data?.candidates?.[0]?.content?.parts?.[0]?.text || '').trim().toUpperCase();
+  const plate = raw.replace(/[^A-Z0-9]/g,'');
+  return (plate && plate !== 'NODETECTED' && plate.length >= 4) ? plate : null;
+}
+
+// ═══════════════════════════════════════════
+// CAMERA / PHOTO
+// ═══════════════════════════════════════════
+function triggerCamera(){
+  if(!state.apiKey){
+    toast('Configura tu API key en Perfil primero', 'warn');
+    return;
+  }
+  document.getElementById('cameraFileInput').click();
+}
+
+function handlePhoto(input){
   const file = input.files[0];
   if(!file) return;
-
-  // Reset input so same file can be selected again
   input.value = '';
 
   const reader = new FileReader();
-  reader.onload = function(e){
-    const img = new Image();
-    img.onload = function(){
-      processPlateImage(img);
-    };
-    img.src = e.target.result;
-    // Show preview
-    const preview = document.getElementById('plateImgPreview');
-    preview.src = e.target.result;
-    preview.classList.add('show');
+  reader.onload = async function(e){
+    const base64 = e.target.result.split(',')[1];
+    const mime   = file.type || 'image/jpeg';
+    currentPhoto = base64;
+    currentMime  = mime;
+
+    if(navigator.onLine){
+      // Read immediately
+      showOverlay(true, 'Analizando matrícula...');
+      try {
+        const plate = await callGemini(base64, mime);
+        showOverlay(false);
+        if(plate){
+          setPlate(plate, true);
+          toast('✓ Matrícula detectada: '+plate);
+        } else {
+          toast('No se detectó matrícula — introduce manualmente', 'warn');
+          openManual();
+        }
+      } catch(err){
+        showOverlay(false);
+        const msg = (err.message||'').includes('API_KEY') ? 'API key inválida — revísala en Perfil' : 'Error al leer — introduce manualmente';
+        toast(msg, 'warn');
+        openManual();
+      }
+    } else {
+      // Offline: store photo for later, mark plate as pending
+      setPlate('PENDIENTE', 'pending');
+      toast('📷 Foto guardada — matrícula se leerá al recuperar conexión', 'warn');
+    }
   };
   reader.readAsDataURL(file);
 }
 
-function processPlateImage(img){
-  showOverlay(true, 'Procesando imagen...');
-
-  setTimeout(function(){
-    try {
-      // Draw to canvas
-      const canvas = document.createElement('canvas');
-      // Crop centre strip where plate typically is
-      const cropW = img.width;
-      const cropH = Math.round(img.height * 0.5);
-      const cropY = Math.round(img.height * 0.25);
-      canvas.width  = cropW * 2;
-      canvas.height = cropH * 2;
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, cropY, cropW, cropH, 0, 0, canvas.width, canvas.height);
-
-      // Grayscale + high contrast
-      const id = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const d  = id.data;
-      for(let i = 0; i < d.length; i += 4){
-        const g = d[i]*0.299 + d[i+1]*0.587 + d[i+2]*0.114;
-        // Threshold at 140 (tuneable)
-        const v = g > 140 ? 255 : 0;
-        d[i] = d[i+1] = d[i+2] = v;
-      }
-      ctx.putImageData(id, 0, 0);
-
-      showOverlay(true, 'Leyendo texto...');
-
-      // Use EasyOCR-like heuristic via canvas analysis
-      // For production: replace readPlateFromCanvas() with
-      // a real OCR call if budget allows.
-      // For now: open manual entry showing the photo for reference.
-      setTimeout(function(){
-        showOverlay(false);
-        // Show manual entry with photo visible as reference
-        toast('Foto capturada — introduce la matrícula mirando la imagen', 'warn');
-        openManual();
-      }, 600);
-
-    } catch(err){
-      showOverlay(false);
-      toast('Error procesando imagen — introduce manualmente', 'warn');
-      openManual();
-    }
-  }, 100);
-}
-
-function showOverlay(show, msg){
-  document.getElementById('scanOverlay').classList.toggle('active', show);
-  if(msg) document.getElementById('scanMsg').textContent = msg;
-}
-
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 // PLATE
-// ═══════════════════════════════════
-function setPlate(plate, fromCamera){
+// ═══════════════════════════════════════════
+function setPlate(plate, mode){
+  // mode: true = from camera (ok), false = manual, 'pending' = offline
   currentPlate = plate;
   const display  = document.getElementById('plateDisplay');
   const status   = document.getElementById('plateStatus');
   const btnClear = document.getElementById('btnClear');
-  display.textContent = plate || '???????';
-  display.classList.toggle('detected', !!plate);
-  if(plate){
+
+  if(mode === 'pending'){
+    display.textContent = '⏳ PENDIENTE';
+    display.className = 'plate-display pending';
     status.style.display = 'inline-flex';
-    status.className  = fromCamera ? 'badge badge-ok' : 'badge badge-manual';
-    status.textContent = fromCamera ? '✓ Detectada automáticamente' : '✏ Introducida manualmente';
+    status.className = 'badge badge-pend';
+    status.textContent = '⏳ Se leerá al recuperar conexión';
     btnClear.style.display = 'inline-flex';
   } else {
-    status.style.display = 'none';
-    btnClear.style.display = 'none';
+    display.textContent = plate || '???????';
+    display.className = 'plate-display' + (plate ? ' detected' : '');
+    if(plate){
+      status.style.display = 'inline-flex';
+      status.className   = mode === true ? 'badge badge-ok' : 'badge badge-manual';
+      status.textContent = mode === true ? '✓ Detectada automáticamente' : '✏ Introducida manualmente';
+      btnClear.style.display = 'inline-flex';
+    } else {
+      status.style.display   = 'none';
+      btnClear.style.display = 'none';
+    }
   }
 }
 
 function clearPlate(){
+  currentPlate = '';
+  currentPhoto = null;
   setPlate('', false);
   document.getElementById('plateInput').value = '';
-  document.getElementById('plateImgPreview').classList.remove('show');
   closeManual();
 }
 
-function toggleManual(){
-  if(isManualOpen) closeManual();
-  else openManual();
-}
+function toggleManual(){ isManualOpen ? closeManual() : openManual(); }
 function openManual(){
   isManualOpen = true;
   document.getElementById('plateManualRow').classList.add('show');
   document.getElementById('btnManual').textContent = '✕ Cerrar';
   const inp = document.getElementById('plateInput');
-  inp.value = currentPlate;
+  inp.value = (currentPlate === 'PENDIENTE') ? '' : currentPlate;
   setTimeout(() => inp.focus(), 150);
 }
 function closeManual(){
@@ -502,36 +563,93 @@ function closeManual(){
   document.getElementById('plateManualRow').classList.remove('show');
   document.getElementById('btnManual').textContent = '✏ Manual';
 }
-
 function onPlateInput(val){
-  const clean = val.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const clean = val.toUpperCase().replace(/[^A-Z0-9]/g,'');
   document.getElementById('plateInput').value = clean;
-  document.getElementById('plateDisplay').textContent = clean || '???????';
+  if(clean) document.getElementById('plateDisplay').textContent = clean;
 }
-
 function confirmManual(){
   const val = document.getElementById('plateInput').value.trim();
-  if(val.length < 4){ toast('Matrícula demasiado corta', 'error'); return; }
+  if(val.length < 4){ toast('Matrícula demasiado corta','error'); return; }
+  currentPhoto = null; // no need to OCR later
   setPlate(val, false);
   closeManual();
 }
 
-// ═══════════════════════════════════
+function showOverlay(show, msg){
+  document.getElementById('scanOverlay').classList.toggle('active', show);
+  if(msg) document.getElementById('scanMsg').textContent = msg;
+}
+
+// ═══════════════════════════════════════════
+// SAVE RECORD
+// ═══════════════════════════════════════════
+function saveRecord(){
+  const company = document.getElementById('op-company').value;
+  const service = document.getElementById('op-service').value;
+  const date    = document.getElementById('op-date').value;
+  const time    = document.getElementById('op-time').value;
+  if(!company)      { toast('Selecciona una compañía',        'error'); return; }
+  if(!service)      { toast('Selecciona un tipo de servicio', 'error'); return; }
+  if(!date)         { toast('Selecciona la fecha',            'error'); return; }
+  if(!currentPlate) { toast('Fotografía o introduce la matrícula', 'error'); return; }
+
+  const record = {
+    id:       Date.now(),
+    company, service, date, time,
+    plate:    currentPlate === 'PENDIENTE' ? '' : currentPlate,
+    photoData: currentPlate === 'PENDIENTE' ? currentPhoto : null,
+    photoMime: currentMime,
+    operator:  getOperatorName(),
+    ts:        new Date().toISOString()
+  };
+
+  // Always goes to queue first; flushed immediately if online + plate known
+  state.queue.unshift(record);
+  save();
+  updateQueueBadge();
+
+  if(navigator.onLine && record.plate){
+    // Has plate already — flush straight to records
+    flushQueue();
+    toast('✓ Registro guardado');
+  } else if(navigator.onLine && !record.plate){
+    // Online but no plate (shouldn't normally happen) — try OCR
+    processPendingQueue();
+    toast('✓ Guardado — procesando matrícula...');
+  } else {
+    // Offline
+    toast('📥 Guardado en cola — se completará al recuperar conexión', 'warn');
+  }
+
+  document.getElementById('op-company').value = '';
+  document.getElementById('op-service').value = '';
+  currentPhoto = null;
+  clearPlate();
+  setDateTime();
+}
+
+function getOperatorName(){
+  const { name, surname } = state.profile;
+  return [name, surname].filter(Boolean).join(' ') || 'Operario';
+}
+
+// ═══════════════════════════════════════════
 // NAV
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 function showPage(id, btn){
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   btn.classList.add('active');
-  if(id==='admin')   renderAdmin();
-  if(id==='summary'){ fillFilterSelects(); renderSummary(); }
-  if(id==='profile') renderProfilePage();
+  if(id === 'admin')   renderAdmin();
+  if(id === 'summary'){ fillFilterSelects(); renderSummary(); }
+  if(id === 'profile') renderProfilePage();
 }
 
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 // SELECTS
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 function fillSelects(){
   fillSelect('op-company', state.companies, false);
   fillSelect('op-service', state.services,  false);
@@ -548,52 +666,15 @@ function fillSelect(id, items, all){
   if(cur) el.value = cur;
 }
 
-// ═══════════════════════════════════
-// SAVE
-// ═══════════════════════════════════
-function saveRecord(){
-  const company = document.getElementById('op-company').value;
-  const service = document.getElementById('op-service').value;
-  const date    = document.getElementById('op-date').value;
-  const time    = document.getElementById('op-time').value;
-  if(!company)      { toast('Selecciona una compañía',        'error'); return; }
-  if(!service)      { toast('Selecciona un tipo de servicio', 'error'); return; }
-  if(!date)         { toast('Selecciona la fecha',            'error'); return; }
-  if(!currentPlate) { toast('Introduce la matrícula',         'error'); return; }
-
-  const record = {
-    id: Date.now(), company, service, date, time,
-    plate: currentPlate,
-    operator: getOperatorName(),
-    ts: new Date().toISOString()
-  };
-
-  if(navigator.onLine){
-    state.records.unshift(record); save();
-    toast('✓ Registro guardado');
-  } else {
-    state.queue.unshift(record); save();
-    updateQueueBadge();
-    toast('📥 Sin conexión — guardado en cola', 'warn');
-  }
-  document.getElementById('op-company').value = '';
-  document.getElementById('op-service').value = '';
-  clearPlate(); setDateTime();
-}
-
-function getOperatorName(){
-  const { name, surname } = state.profile;
-  return [name, surname].filter(Boolean).join(' ') || 'Operario';
-}
-
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 // PROFILE
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 function renderProfilePage(){
   const { name, surname } = state.profile;
   document.getElementById('profileName').value    = name    || '';
   document.getElementById('profileSurname').value = surname || '';
-  updateProfileHeader(); renderQueuePanel();
+  document.getElementById('apiKeyInput').value    = state.apiKey ? '•'.repeat(20) : '';
+  updateApiKeyStatus(); updateProfileHeader(); renderQueuePanel();
 }
 function updateProfileHeader(){
   const { name, surname } = state.profile;
@@ -607,28 +688,72 @@ function saveProfile(){
   state.profile.surname = document.getElementById('profileSurname').value.trim();
   save(); updateProfileHeader(); toast('✓ Perfil guardado');
 }
+function saveApiKey(){
+  const val = document.getElementById('apiKeyInput').value.trim();
+  if(!val || val.includes('•')){ toast('Introduce una key válida', 'error'); return; }
+  state.apiKey = val; save();
+  updateApiKeyStatus(); updateNoApiWarn(); toast('✓ API key guardada');
+  // Try to process any pending items now that we have a key
+  if(navigator.onLine && state.queue.length) processPendingQueue();
+}
+function clearApiKey(){
+  state.apiKey = '';
+  document.getElementById('apiKeyInput').value = '';
+  save(); updateApiKeyStatus(); updateNoApiWarn(); toast('Key eliminada');
+}
+function updateApiKeyStatus(){
+  const el = document.getElementById('apiKeyStatus'); if(!el) return;
+  if(state.apiKey){
+    el.className = 'apikey-status ok';
+    el.textContent = '✓ API key configurada — escaneo automático activo';
+  } else {
+    el.className = 'apikey-status missing';
+    el.textContent = '⚠ Sin API key — solo entrada manual disponible';
+  }
+}
+function updateNoApiWarn(){
+  const el = document.getElementById('noApiWarn');
+  if(el) el.classList.toggle('show', !state.apiKey);
+}
+
 function renderQueuePanel(){
   const c = document.getElementById('queueContainer'); if(!c) return;
   if(!state.queue.length){
-    c.innerHTML = '<div class="card"><div class="queue-empty"><div style="font-size:1.8rem;margin-bottom:6px">✓</div>Todo sincronizado — sin pendientes</div></div>';
+    c.innerHTML = '<div class="card"><div class="queue-empty"><div style="font-size:1.8rem;margin-bottom:6px">✓</div>Todo procesado — sin pendientes</div></div>';
     return;
   }
-  const items = state.queue.map(r =>
-    '<div class="queue-item">' +
-      '<div><div class="queue-plate">'+r.plate+'</div><div class="queue-meta">'+r.date+(r.time?' · '+r.time:'')+'</div></div>' +
-      '<div><div class="queue-val">'+r.company+'</div><div class="queue-meta">'+r.service+'</div></div>' +
-      '<span class="badge badge-pend">⏳</span>' +
-    '</div>'
-  ).join('');
-  const btn = navigator.onLine
-    ? '<button class="btn btn-primary btn-full" style="margin-top:12px" onclick="syncQueue().then(()=>renderQueuePanel())">↑ Sincronizar ahora ('+state.queue.length+')</button>'
-    : '<div style="text-align:center;font-size:.72rem;color:var(--muted);margin-top:12px">Se sincronizarán al recuperar la conexión</div>';
-  c.innerHTML = '<div class="card"><div class="card-label">— '+state.queue.length+' pendiente'+(state.queue.length!==1?'s':'')+'</div>'+items+btn+'</div>';
+
+  const syncingNow = isSyncing && navigator.onLine;
+  const items = state.queue.map(r => {
+    const hasPhoto   = !!r.photoData;
+    const hasPlate   = !!r.plate;
+    const plateLabel = hasPlate ? r.plate : (hasPhoto ? '⏳ Leyendo...' : '⚠ Sin foto');
+    const plateClass = hasPlate ? 'queue-plate known' : 'queue-plate unknown';
+    return '<div class="queue-item">' +
+      '<div class="queue-item-row">' +
+        '<div><div class="'+plateClass+'">'+plateLabel+'</div><div class="queue-meta">'+r.date+(r.time?' · '+r.time:'')+'</div></div>' +
+        '<div><div class="queue-val">'+r.company+'</div><div class="queue-meta">'+r.service+'</div></div>' +
+        '<span class="badge badge-pend">⏳</span>' +
+      '</div>' +
+      (syncingNow && hasPhoto && !hasPlate ? '<div class="sync-row"><div class="sync-dot"></div>Leyendo matrícula con IA...</div>' : '') +
+    '</div>';
+  }).join('');
+
+  let action = '';
+  if(navigator.onLine && state.apiKey){
+    action = '<button class="btn btn-primary btn-full" style="margin-top:12px" onclick="processPendingQueue()">↑ Procesar ahora ('+state.queue.length+')</button>';
+  } else if(!navigator.onLine){
+    action = '<div style="text-align:center;font-size:.72rem;color:var(--muted);margin-top:12px">Se procesarán automáticamente al recuperar conexión</div>';
+  } else {
+    action = '<div style="text-align:center;font-size:.72rem;color:var(--warn);margin-top:12px">Configura la API key para procesar automáticamente</div>';
+  }
+
+  c.innerHTML = '<div class="card"><div class="card-label">— '+state.queue.length+' pendiente'+(state.queue.length!==1?'s':'')+'</div>'+items+action+'</div>';
 }
 
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 // ADMIN
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 function renderAdmin(){
   renderTags('companies','companiesList');
   renderTags('services','servicesList');
@@ -654,9 +779,9 @@ function removeItem(key, idx, listId){
   toast('"'+name+'" eliminado');
 }
 
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 // SUMMARY
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 function renderSummary(){
   const fc = document.getElementById('filter-company')?.value || '';
   const fs = document.getElementById('filter-service')?.value || '';
@@ -695,16 +820,16 @@ function clearFilters(){
   renderSummary();
 }
 
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 // UTILS
-// ═══════════════════════════════════
+// ═══════════════════════════════════════════
 let toastTimer;
 function toast(msg, type){
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = (type ? type+' ' : '') + 'show';
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
 }
 function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 function setDateTime(){
@@ -718,7 +843,7 @@ document.getElementById('newService').addEventListener('keydown', e => { if(e.ke
 document.getElementById('plateInput').addEventListener('keydown',  e => { if(e.key==='Enter') confirmManual(); });
 
 // INIT
-setDateTime(); fillSelects(); updateQueueBadge(); updateProfileHeader();
+setDateTime(); fillSelects(); updateQueueBadge(); updateProfileHeader(); updateNoApiWarn();
 </script>
 </body>
 </html>
